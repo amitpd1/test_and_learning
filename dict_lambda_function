@@ -1,0 +1,122 @@
+"""
+Complete the file_type_getter function. This function accepts a list of tuples, where each tuple contains:
+
+A "file type" (e.g. "code", "document", "image", etc)
+A list of associated file extensions (e.g. [".py", ".js"] or [".docx", ".doc"])
+The function returns a function for looking up the file type of a given file extension.
+
+Create an empty dictionary to map each file extension to its file type.
+Loop through the file_extension_tuples:
+Loop through the file extensions.
+Add each extension to the dictionary and assign its value to the file type.
+For example, if given the following list of tuples:
+
+# list of tuples
+[
+    ("document", [".doc", ".docx"]),
+    ("image", [".jpg", ".png"])
+]
+
+# resulting dictionary
+{
+    ".doc": "document",
+    ".docx": "document",
+    ".jpg": "image",
+    ".png": "image",
+}
+
+Return a lambda function that accepts a string (a file extension) and returns its file type from the dictionary.
+Use the .get dictionary method in the lambda function. Return the file type of the extension if found or "Unknown" if it's missing.
+"""
+  
+def file_type_getter(file_extension_tuples):
+    # create an empty dictionary
+    ext_type = {}
+
+    for extensions in file_extension_tuples:
+        for files in extensions[1]:
+            ext_type[files] = extensions[0]
+
+    print(f" output Dictionary:  {ext_type}")
+
+    lambda_fn = lambda ret_string: ext_type.get(ret_string)
+
+    return lambda_fn
+
+
+from main import *
+
+run_cases = [
+    (
+        [("document", [".doc", ".docx"]), ("image", [".jpg", ".png"])],
+        ".doc",
+        "document",
+    ),
+    (
+        [("document", [".doc", ".docx"]), ("image", [".jpg", ".png"])],
+        ".png",
+        "image",
+    ),
+]
+
+submit_cases = run_cases + [
+    (
+        [("document", [".doc", ".docx"]), ("image", [".jpg", ".png"])],
+        ".txt",
+        "Unknown",
+    ),
+    (
+        [("code", [".py", ".js"]), ("markup", [".html", ".xml"])],
+        ".js",
+        "code",
+    ),
+]
+
+
+def test(file_extension_tuples, ext, expected_output):
+    try:
+        print("---------------------------------")
+        print("Input tuples:")
+        for file_type, exts in file_extension_tuples:
+            print(f"  {file_type}: {exts}")
+        print(f"Extension: {ext}")
+        print(f"Expected: {expected_output}")
+        getter_function = file_type_getter(file_extension_tuples)
+        result = getter_function(ext)
+        print(f"Actual:   {result}")
+        if result == expected_output:
+            print("Pass")
+            return True
+        print("Fail")
+        return False
+    except Exception as e:
+        print("Fail")
+        print(e)
+        return False
+
+
+def main():
+    passed = 0
+    failed = 0
+    skipped = len(submit_cases) - len(test_cases)
+    for test_case in test_cases:
+        correct = test(*test_case)
+        if correct:
+            passed += 1
+        else:
+            failed += 1
+    if failed == 0:
+        print("============= PASS ==============")
+    else:
+        print("============= FAIL ==============")
+    if skipped > 0:
+        print(f"{passed} passed, {failed} failed, {skipped} skipped")
+    else:
+        print(f"{passed} passed, {failed} failed")
+
+
+test_cases = submit_cases
+if "__RUN__" in globals():
+    test_cases = run_cases
+
+main()
