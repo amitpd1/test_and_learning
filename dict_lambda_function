@@ -34,14 +34,15 @@ def file_type_getter(file_extension_tuples):
     ext_type = {}
 
     for extensions in file_extension_tuples:
+        # extensions[1] is used because that is where extension list is available
         for files in extensions[1]:
+            #extensions[0] is where the document type exists
             ext_type[files] = extensions[0]
 
-    print(f" output Dictionary:  {ext_type}")
+    lambda_fn = lambda ret_string: ext_type.get(ret_string, "Unknown")
 
-    lambda_fn = lambda ret_string: ext_type.get(ret_string)
+    return lambda_fn        
 
-    return lambda_fn
 
 
 from main import *
